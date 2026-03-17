@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 37 30'%3E%3Cpath d='M14.5947 29.5709H29.1827L36.4834 22.2902L29.1827 15.0028L14.5947 29.5709Z' fill='%23F8991D'/%3E%3Cpath d='M36.4834 7.72214L29.1827 15.0028L18.2417 4.08181L0 22.2902V15.0028L14.5947 0.44145H29.1827L36.4834 7.72214Z' fill='%23F8991D'/%3E%3Cpath d='M14.5947 15.0028L0 29.5709H7.30074L21.8887 15.0028H14.5947Z' fill='%23F8991D'/%3E%3C/svg%3E">
+<title>SpringTide Ventures — Capital Raise Diagnostic | BayRise Capital Partners</title>
+<meta property="og:title" content="SpringTide Ventures — Capital Raise Diagnostic">
+<meta property="og:description" content="Interactive raise gap model, LP velocity analysis, and cost-of-delay calculator. Prepared by BayRise Capital Partners.">
+<meta property="og:image" content="https://bayrisecap.github.io/bayrise-diagnostics/springtide-ventures/og-springtide-ventures.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bayrisecap.github.io/bayrise-diagnostics/springtide-ventures/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SpringTide Ventures — Capital Raise Diagnostic">
+<meta name="twitter:description" content="Interactive raise gap model, LP velocity analysis, and cost-of-delay calculator.">
+<meta name="twitter:image" content="https://bayrisecap.github.io/bayrise-diagnostics/springtide-ventures/og-springtide-ventures.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-primary: #ffffff;
+    --bg-card: #f8fafc;
+    --bg-elevated: #f1f5f9;
+    --bg-input: #ffffff;
+    --border: #e2e8f0;
+    --border-light: #f1f5f9;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --text-dim: #cbd5e1;
+    --navy: #1a2b5f;
+    --navy-light: #2a3d7a;
+    --orange: #e8942e;
+    --orange-light: #f5a623;
+    --accent: #1a2b5f;
+    --accent-light: rgba(26, 43, 95, 0.06);
+    --red: #dc2626;
+    --red-bg: #fef2f2;
+    --red-border: #fecaca;
+    --red-text: #991b1b;
+    --amber: #d97706;
+    --amber-bg: #fffbeb;
+    --amber-border: #fde68a;
+    --amber-text: #92400e;
+    --green: #16a34a;
+    --green-bg: #f0fdf4;
+    --green-border: #bbf7d0;
+    --green-text: #166534;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 40px 24px 60px; }
+
+  /* Logo */
+  .logo-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-wrap { display: flex; align-items: center; gap: 10px; }
+  .logo-text {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.3px;
+  }
+  .logo-sub {
+    font-size: 10px;
+    font-weight: 600;
+    color: #94a3b8;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-left: 2px;
+  }
+  .prepared-badge {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .hero-tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    background: var(--accent-light);
+    border: 1px solid var(--border);
+    color: var(--navy);
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    margin-bottom: 14px;
+    color: var(--navy);
+  }
+  .hero .sub {
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 540px;
+    margin: 0 auto;
+    line-height: 1.65;
+  }
+
+  /* Sections */
+  .section { margin-bottom: 36px; }
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+    color: var(--navy);
+  }
+
+  /* Cards */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Text */
+  p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 10px; }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--text-primary); font-weight: 600; }
+
+  /* Three pillars */
+  .pillars {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .pillar {
+    text-align: center;
+    padding: 18px 12px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+  }
+  .pillar .p-icon { font-size: 24px; margin-bottom: 8px; }
+  .pillar .p-label { font-size: 11px; font-weight: 700; color: var(--navy); letter-spacing: 0.3px; margin-bottom: 4px; }
+  .pillar .p-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+  .pillar.pillar-gap {
+    border: 2px dashed var(--orange);
+    background: rgba(232, 148, 46, 0.03);
+  }
+  .pillar.pillar-gap .p-label { color: var(--orange); }
+
+  /* Arrow between pillars */
+  .pillar-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 0 0 20px 0;
+  }
+  .arrow-line { flex: 1; height: 2px; background: var(--border); }
+  .arrow-q {
+    padding: 6px 16px;
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-border);
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--amber-text);
+    white-space: nowrap;
+  }
+
+  /* Calculator */
+  .calc-wrapper { margin: 16px 0; }
+  .calc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .calc-row:last-child { border-bottom: none; }
+  .calc-label { font-size: 13px; color: var(--text-secondary); }
+  .calc-input-wrap {
+    display: flex;
+    align-items: center;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 10px;
+    width: 140px;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.2s;
+  }
+  .calc-input-wrap:focus-within { border-color: var(--navy); }
+  .calc-input-wrap .prefix { color: var(--text-muted); font-size: 13px; margin-right: 4px; }
+  .calc-input-wrap .suffix { color: var(--text-muted); font-size: 12px; margin-left: 4px; }
+  .calc-input-wrap input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-size: 15px;
+    font-weight: 600;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+  input[type=number]::-webkit-inner-spin-button { opacity: 0.3; }
+
+  /* Results panel */
+  .results-panel {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 18px;
+    box-shadow: var(--shadow-md);
+  }
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .result-item {
+    text-align: center;
+    padding: 12px 8px;
+    background: var(--bg-card);
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+  }
+  .result-item .r-value { font-size: 22px; font-weight: 800; }
+  .result-item .r-label { font-size: 10px; color: var(--text-muted); margin-top: 2px; font-weight: 500; }
+  .value-red { color: var(--red); }
+  .value-amber { color: var(--amber); }
+  .value-green { color: var(--green); }
+  .value-navy { color: var(--navy); }
+
+  /* Bars */
+  .bar-wrap { margin: 14px 0; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .bar-label { width: 70px; font-size: 11px; color: var(--text-muted); flex-shrink: 0; font-weight: 500; }
+  .bar-track { flex: 1; height: 24px; background: var(--bg-elevated); border-radius: 6px; overflow: hidden; }
+  .bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    transition: width 0.6s ease;
+    min-width: 32px;
+  }
+  .bar-current { background: #94a3b8; }
+  .bar-required { background: var(--navy); }
+
+  /* Alert box */
+  .alert-box {
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.55;
+    font-weight: 500;
+  }
+  .alert-critical { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red-text); }
+  .alert-warning { background: var(--amber-bg); border: 1px solid var(--amber-border); color: var(--amber-text); }
+  .alert-ok { background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green-text); }
+
+  /* Stat grid */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .stat-box {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .stat-box .label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; font-weight: 500; }
+  .stat-box .value { font-size: 24px; font-weight: 800; }
+  .stat-box .note { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Leakage items */
+  .leakage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .leakage-item {
+    padding: 14px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+  }
+  .leakage-title { font-size: 12px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+  .leakage-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* Two columns */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+  .col-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+  .col-card h4 { font-size: 11px; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.5px; }
+  .col-card .we-do { color: var(--green); }
+  .col-card .we-dont { color: var(--red); }
+  .col-card li {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+    list-style: none;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.45;
+  }
+  .col-card li::before { position: absolute; left: 0; font-size: 11px; }
+  .col-card .do-list li::before { content: "→"; color: var(--green); }
+  .col-card .dont-list li::before { content: "×"; color: var(--red); font-weight: 700; }
+
+  /* CTA */
+  .cta-section {
+    text-align: center;
+    padding: 32px 24px;
+    background: linear-gradient(135deg, rgba(26, 43, 95, 0.03), rgba(232, 148, 46, 0.04));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-top: 40px;
+    box-shadow: var(--shadow-sm);
+  }
+  .cta-section h2 { font-size: 20px; margin-bottom: 8px; color: var(--navy); }
+  .cta-section p { max-width: 460px; margin: 0 auto 20px; font-size: 13px; }
+  .cta-btn {
+    display: inline-block;
+    padding: 13px 36px;
+    background: var(--navy);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.3px;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(26, 43, 95, 0.25);
+  }
+  .cta-btn:hover { background: var(--navy-light); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26, 43, 95, 0.3); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .footer .brand { font-size: 10px; color: var(--text-muted); letter-spacing: 1.5px; font-weight: 600; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 24px; }
+    .pillars { grid-template-columns: 1fr; }
+    .stat-grid, .two-col, .leakage-grid { grid-template-columns: 1fr; }
+    .results-grid { grid-template-columns: 1fr; gap: 8px; }
+    .logo-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .prepared-badge { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Logo Bar -->
+  <div class="logo-bar">
+    <div class="logo-wrap">
+      <svg width="238" height="34" viewBox="0 0 238 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g><path d="M14.5947 29.5709H29.1827L36.4834 22.2902L29.1827 15.0028L14.5947 29.5709Z" fill="#F8991D"/><path d="M36.4834 7.72214L29.1827 15.0028L18.2417 4.08181L0 22.2902V15.0028L14.5947 0.44145H29.1827L36.4834 7.72214Z" fill="#F8991D"/><path d="M14.5947 15.0028L0 29.5709H7.30074L21.8887 15.0028H14.5947Z" fill="#F8991D"/></g>
+        <g><path d="M55.4883 3.65036C58.2506 3.65036 60.4252 4.23013 62.0124 5.38964C63.5927 6.54916 64.3829 8.15358 64.3829 10.2164C64.3829 11.4097 64.0993 12.4209 63.5387 13.2501C62.9781 14.0792 62.1542 14.7264 61.0804 15.1983C62.4176 15.6433 63.4644 16.3106 64.2276 17.2005C64.9908 18.0904 65.369 19.2229 65.369 20.6049C65.369 21.6094 65.1663 22.5194 64.7544 23.3217C64.3424 24.1306 63.7548 24.8183 62.9984 25.3913C62.2353 25.9643 61.3032 26.4025 60.2024 26.7058C59.1015 27.0092 57.8588 27.1643 56.4743 27.1643H45.6482V3.6571H55.4883V3.65036ZM55.1709 13.6478C56.2515 13.6478 57.1024 13.4253 57.7373 12.9804C58.3721 12.5355 58.6896 11.8816 58.6896 11.0187C58.6896 10.1558 58.3721 9.54231 57.7373 9.12434C57.1024 8.70638 56.2515 8.49065 55.1709 8.49065H51.0579V13.6478H55.1709ZM55.9813 22.3172C57.1767 22.3172 58.0885 22.0813 58.7233 21.6161C59.3582 21.1509 59.6689 20.4701 59.6689 19.5802C59.6689 17.8477 58.4059 16.9848 55.8733 16.9848H51.0579V22.3172H55.9813Z" fill="#1C3665"/><path d="M86.2446 27.1575H81.0105V24.9801C80.4702 25.7553 79.7746 26.362 78.9168 26.807C78.0591 27.2519 76.9785 27.4743 75.6683 27.4743C74.3581 27.4743 73.1559 27.2317 72.0686 26.753C70.9813 26.2744 70.0492 25.6137 69.2726 24.7711C68.4959 23.9284 67.8948 22.9239 67.4626 21.7509C67.0303 20.5847 66.8142 19.3038 66.8142 17.9286C66.8142 16.5533 67.0303 15.2388 67.4626 14.0658C67.8948 12.8995 68.5027 11.8816 69.2928 11.0119C70.0763 10.149 71.015 9.47489 72.1024 8.99626C73.1897 8.51762 74.3784 8.27494 75.6683 8.27494C76.9583 8.27494 78.0659 8.50414 78.9168 8.96256C79.7746 9.42097 80.4702 10.0412 81.0105 10.8367V8.62549H86.2446V27.1508V27.1575ZM81.0037 17.2612C80.8889 16.1826 80.4297 15.2792 79.6327 14.5444C78.8358 13.8096 77.8295 13.4388 76.6071 13.4388C75.9249 13.4388 75.3171 13.5534 74.7768 13.7894C74.2365 14.0253 73.7773 14.3422 73.3856 14.7534C73.0006 15.1646 72.7034 15.6433 72.5076 16.1893C72.305 16.7421 72.2104 17.3151 72.2104 17.9286C72.2104 18.542 72.3185 19.0746 72.5278 19.6139C72.7372 20.1532 73.0344 20.6184 73.4058 21.0161C73.7773 21.4139 74.2433 21.7307 74.7971 21.9667C75.3441 22.2026 75.9519 22.3172 76.6071 22.3172C77.2149 22.3172 77.7755 22.2161 78.2752 22.0206C78.7818 21.8251 79.2275 21.5622 79.6125 21.2319C79.9974 20.9015 80.3081 20.5038 80.5445 20.0386C80.7808 19.5735 80.9294 19.0813 81.0037 18.5623V17.2612Z" fill="#1C3665"/><path d="M92.1473 34L94.7475 26.9485L87.6831 8.63224H93.2346L97.2396 19.8971L101.386 8.63224H106.904L97.1653 34H92.1405H92.1473Z" fill="#1C3665"/><path d="M118.824 3.65036C121.918 3.65036 124.315 4.32449 126.01 5.66602C127.712 7.01429 128.556 8.92211 128.556 11.4029C128.556 13.2029 128.111 14.6995 127.219 15.8927C126.328 17.0859 125.078 17.9623 123.457 18.5218L128.624 27.1508H122.262L117.622 19.2229H114.286V27.1508H108.876V3.64361H118.824V3.65036ZM118.689 14.9826C120.027 14.9826 121.053 14.7062 121.783 14.1601C122.512 13.6141 122.87 12.8591 122.87 11.8951C122.87 10.931 122.505 10.1827 121.783 9.62995C121.053 9.0839 120.027 8.8075 118.689 8.8075H114.293V14.9826H118.689Z" fill="#1C3665"/><path d="M130.846 3.79192C130.846 2.99644 131.13 2.31557 131.71 1.75603C132.285 1.1965 133.007 0.913361 133.872 0.913361C134.736 0.913361 135.425 1.1965 135.999 1.75603C136.573 2.31557 136.864 2.99644 136.864 3.79192C136.864 4.5874 136.573 5.30199 135.999 5.86152C135.425 6.42106 134.716 6.70419 133.872 6.70419C133.027 6.70419 132.285 6.42106 131.71 5.86152C131.136 5.30199 130.846 4.60762 130.846 3.79192ZM131.238 8.63224H136.472V27.1575H131.238V8.63224Z" fill="#1C3665"/><path d="M139.214 14.1399C139.214 12.2658 139.889 10.8232 141.233 9.80523C142.577 8.78728 144.482 8.28167 146.947 8.28167C149.412 8.28167 151.438 8.82099 152.762 9.89287C154.085 10.9715 154.767 12.4546 154.815 14.3489H149.506C149.459 12.9669 148.615 12.2793 146.974 12.2793C145.332 12.2793 144.407 12.8321 144.407 13.9309C144.407 14.5174 144.677 14.9556 145.218 15.2455C145.758 15.5354 146.427 15.7713 147.224 15.9466C148.02 16.1219 148.885 16.2904 149.824 16.4522C150.762 16.614 151.627 16.8837 152.424 17.2612C153.221 17.6387 153.889 18.1645 154.43 18.8387C154.97 19.5195 155.24 20.4498 155.24 21.6431C155.24 23.4228 154.565 24.8317 153.221 25.8699C151.87 26.9081 149.844 27.4339 147.122 27.4339C144.4 27.4339 142.219 26.8879 140.848 25.8025C139.477 24.7171 138.795 23.234 138.795 21.3667H144.07C144.184 22.7689 145.204 23.47 147.129 23.47C149.054 23.47 149.939 22.9239 149.939 21.8184C149.939 21.2319 149.675 20.8139 149.148 20.5577C148.622 20.3015 147.96 20.0993 147.163 19.9443C146.366 19.7892 145.501 19.6341 144.576 19.4723C143.651 19.3106 142.786 19.0409 141.989 18.6634C141.192 18.2926 140.531 17.7533 140.004 17.0522C139.477 16.3511 139.214 15.3803 139.214 14.1399Z" fill="#1C3665"/><path d="M161.953 19.0544C162.143 20.1532 162.622 21.0498 163.392 21.7375C164.162 22.4251 165.162 22.7756 166.377 22.7756C167.127 22.7756 167.816 22.5869 168.451 22.2161C169.085 21.8453 169.565 21.3869 169.889 20.8476H175.549C175.312 21.8521 174.921 22.7689 174.374 23.5846C173.82 24.4003 173.144 25.1014 172.334 25.6744C171.523 26.2474 170.612 26.6923 169.592 27.0092C168.572 27.326 167.464 27.4811 166.269 27.4811C164.864 27.4811 163.568 27.2384 162.386 26.7598C161.204 26.2811 160.184 25.6137 159.326 24.7576C158.469 23.9014 157.8 22.8902 157.307 21.724C156.814 20.5577 156.571 19.2836 156.571 17.9016C156.571 16.5196 156.814 15.2388 157.293 14.059C157.773 12.8793 158.442 11.8613 159.299 11.0052C160.157 10.149 161.17 9.48838 162.338 9.003C163.507 8.52437 164.797 8.28167 166.202 8.28167C167.512 8.28167 168.727 8.47718 169.842 8.86144C170.956 9.2457 171.935 9.79848 172.78 10.5131C173.624 11.2276 174.306 12.0771 174.833 13.0748C175.36 14.0725 175.697 15.1646 175.832 16.3578C175.88 16.8971 175.907 17.3016 175.92 17.5713C175.934 17.8409 175.94 18.0432 175.94 18.1847C175.94 18.4679 175.927 18.7578 175.907 19.0611H161.953V19.0544ZM170.288 16.1758C170.125 15.2388 169.68 14.477 168.95 13.877C168.221 13.2838 167.336 12.9804 166.276 12.9804C165.216 12.9804 164.27 13.2703 163.568 13.8568C162.865 14.4433 162.386 15.2118 162.129 16.1758H170.281H170.288Z" fill="#1C3665"/></g>
+        <g><path d="M187.51 14.9691C187.982 14.6388 188.313 14.3759 188.502 13.7894H189.333C189.11 14.5444 188.678 15.1511 188.05 15.5961C187.422 16.041 186.686 16.2702 185.848 16.2702C185.328 16.2702 184.835 16.1758 184.369 15.9803C183.903 15.7848 183.491 15.5152 183.147 15.1646C182.802 14.8141 182.525 14.4096 182.329 13.9444C182.134 13.4793 182.039 12.9872 182.039 12.4681C182.039 11.949 182.134 11.4569 182.329 10.9917C182.525 10.5266 182.795 10.1153 183.147 9.77153C183.498 9.42772 183.903 9.15131 184.369 8.95581C184.835 8.76031 185.328 8.66593 185.848 8.66593C186.686 8.66593 187.422 8.88841 188.05 9.3266C188.678 9.76478 189.11 10.358 189.333 11.0928H188.502C188.32 10.5131 187.989 10.2973 187.51 9.96701C187.03 9.63669 186.476 9.47491 185.841 9.47491C185.443 9.47491 185.058 9.54906 184.7 9.70411C184.342 9.85916 184.031 10.0681 183.761 10.3445C183.491 10.6142 183.282 10.9378 183.133 11.3086C182.985 11.6793 182.91 12.0636 182.91 12.4748C182.91 12.886 182.985 13.2703 183.133 13.6411C183.282 14.0118 183.491 14.3287 183.761 14.6051C184.031 14.8815 184.349 15.0905 184.707 15.2455C185.065 15.4006 185.443 15.4747 185.841 15.4747C186.483 15.4747 187.037 15.3129 187.51 14.9826V14.9691Z" fill="#333333"/><path d="M196.283 16.1219L195.459 14.268H191.596L190.772 16.1219H189.84L193.122 8.80077H193.919L197.201 16.1219H196.269H196.283ZM193.534 9.87264L191.933 13.486H195.114L193.527 9.87264H193.534Z" fill="#333333"/><path d="M201.483 8.8075C201.766 8.8075 202.057 8.84121 202.354 8.91536C202.651 8.98952 202.935 9.12434 203.212 9.33332C203.489 9.53556 203.698 9.79848 203.833 10.1153C203.968 10.4322 204.036 10.7558 204.036 11.0794C204.036 11.4029 203.975 11.713 203.853 11.9894C203.732 12.2658 203.563 12.5085 203.34 12.7175C203.117 12.9265 202.847 13.0748 202.53 13.1894C202.212 13.2972 201.861 13.3512 201.483 13.3512H199.153V16.1286H198.288V8.8075H201.483ZM201.483 12.5759C202.003 12.5759 202.415 12.4411 202.719 12.158C203.023 11.8816 203.178 11.5175 203.178 11.0794C203.178 10.6412 203.023 10.2771 202.719 10.0007C202.415 9.72434 202.003 9.58277 201.483 9.58277H199.153V12.5759H201.483Z" fill="#333333"/><path d="M205.414 16.1219V8.80077H206.278V16.1219H205.414Z" fill="#333333"/><path d="M211.107 9.58277V16.1286H210.229V9.58277H207.507V8.8075H213.822V9.58277H211.107Z" fill="#333333"/><path d="M219.981 16.1219L219.157 14.268H215.294L214.47 16.1219H213.538L216.821 8.80077H217.618L220.9 16.1219H219.968H219.981ZM217.233 9.87264L215.632 13.486H218.813L217.226 9.87264H217.233Z" fill="#333333"/><path d="M227.052 16.1219H221.987V8.80077H222.852V15.3332H227.052V16.1219Z" fill="#333333"/><path d="M185.591 19.7285C185.875 19.7285 186.166 19.7622 186.463 19.8364C186.76 19.9105 187.043 20.0454 187.32 20.2543C187.597 20.4566 187.807 20.7195 187.942 21.0364C188.077 21.3532 188.144 21.6768 188.144 22.0004C188.144 22.3239 188.084 22.6341 187.962 22.9104C187.84 23.1868 187.672 23.4295 187.449 23.6385C187.226 23.8475 186.956 23.9958 186.638 24.1104C186.321 24.2183 185.97 24.2722 185.591 24.2722H183.261V27.0496H182.397V19.7285H185.591ZM185.591 23.4969C186.111 23.4969 186.523 23.3621 186.827 23.079C187.131 22.8026 187.287 22.4385 187.287 22.0004C187.287 21.5622 187.131 21.1981 186.827 20.9217C186.523 20.6453 186.111 20.5038 185.591 20.5038H183.261V23.4969H185.591Z" fill="#333333"/><path d="M194.223 27.0496L193.399 25.1958H189.536L188.712 27.0496H187.78L191.062 19.7285H191.859L195.141 27.0496H194.209H194.223ZM191.481 20.8004L189.88 24.4138H193.061L191.474 20.8004H191.481Z" fill="#333333"/><path d="M201.24 27.0496L198.437 23.9149H197.093V27.0496H196.229V19.7285H199.619C199.97 19.7285 200.294 19.7757 200.585 19.8768C200.882 19.978 201.138 20.1195 201.348 20.3015C201.564 20.4903 201.726 20.706 201.841 20.9689C201.956 21.2251 202.01 21.5082 202.01 21.8184C202.01 22.0408 201.969 22.2767 201.895 22.5194C201.821 22.7621 201.686 22.9846 201.496 23.1936C201.307 23.4026 201.057 23.5711 200.74 23.7127C200.429 23.8542 200.051 23.9217 199.612 23.9217H199.484L202.32 27.0564H201.24V27.0496ZM199.619 23.1262C200.078 23.1262 200.45 23.0048 200.726 22.7689C201.01 22.5262 201.145 22.2094 201.145 21.8184C201.145 21.4274 201.003 21.1105 200.726 20.8678C200.443 20.6251 200.078 20.5105 199.619 20.5105H197.093V23.1329H199.619V23.1262Z" fill="#333333"/><path d="M206.143 20.5038V27.0496H205.265V20.5038H202.543V19.7285H208.858V20.5038H206.143Z" fill="#333333"/><path d="M216.503 27.0496H215.76L210.965 21.2386V27.0496H210.101V19.7285H210.843L215.639 25.607V19.7285H216.503V27.0496Z" fill="#333333"/><path d="M223.77 27.0496H218.421V19.7285H223.763V20.5038H219.286V22.9846H223.446V23.7599H219.286V26.2609H223.77V27.0496Z" fill="#333333"/><path d="M230.402 27.0496L227.599 23.9149H226.255V27.0496H225.391V19.7285H228.781C229.132 19.7285 229.457 19.7757 229.747 19.8768C230.044 19.978 230.301 20.1195 230.51 20.3015C230.726 20.4903 230.888 20.706 231.003 20.9689C231.118 21.2251 231.172 21.5082 231.172 21.8184C231.172 22.0408 231.131 22.2767 231.057 22.5194C230.983 22.7621 230.848 22.9846 230.659 23.1936C230.47 23.4026 230.22 23.5711 229.902 23.7127C229.592 23.8542 229.213 23.9217 228.774 23.9217H228.646L231.483 27.0564H230.402V27.0496ZM228.781 23.1262C229.24 23.1262 229.612 23.0048 229.889 22.7689C230.172 22.5262 230.308 22.2094 230.308 21.8184C230.308 21.4274 230.166 21.1105 229.889 20.8678C229.605 20.6251 229.24 20.5105 228.781 20.5105H226.255V23.1329H228.781V23.1262Z" fill="#333333"/><path d="M236.953 20.1397C237.446 20.5105 237.757 21.0835 237.879 21.6835H237.014C236.953 21.3599 236.818 21.1914 236.602 20.9555C236.386 20.7195 236.143 20.5577 235.866 20.4701C235.589 20.3824 235.339 20.342 235.103 20.342C234.866 20.342 234.63 20.3824 234.367 20.4701C234.103 20.5577 233.88 20.6993 233.705 20.915C233.529 21.124 233.441 21.3802 233.441 21.67C233.441 21.9734 233.536 22.2161 233.725 22.3914C233.914 22.5666 234.191 22.688 234.549 22.7621L236.15 23.1194C236.399 23.1734 236.67 23.261 236.967 23.3891C237.264 23.5172 237.507 23.7194 237.703 23.9891C237.899 24.2587 238 24.6025 238 25.0138C238 25.2564 237.96 25.4991 237.872 25.7486C237.784 25.998 237.635 26.2339 237.426 26.4429C237.217 26.6519 236.933 26.8339 236.575 26.9755C236.217 27.1171 235.785 27.1912 235.285 27.1912C234.907 27.1912 234.542 27.144 234.198 27.0429C233.853 26.9418 233.543 26.8002 233.279 26.6115C233.016 26.4227 232.793 26.1935 232.631 25.9171C232.469 25.6407 232.361 25.3373 232.313 25.007H233.218C233.299 25.5126 233.529 25.7148 233.921 25.998C234.306 26.2811 234.792 26.4227 235.366 26.4227C235.94 26.4227 236.345 26.2946 236.67 26.0452C236.994 25.7958 237.149 25.4654 237.149 25.0542C237.149 24.7239 237.055 24.4745 236.865 24.3059C236.676 24.1374 236.372 24.0026 235.954 23.9082L234.299 23.5509C233.124 23.288 232.536 22.6678 232.536 21.6835C232.536 21.3802 232.597 21.097 232.725 20.8341C232.854 20.5712 233.029 20.3555 233.259 20.1667C233.489 19.9779 233.765 19.8364 234.09 19.7353C234.414 19.6341 234.765 19.5802 235.143 19.5802C235.866 19.5802 236.474 19.7622 236.967 20.133L236.953 20.1397Z" fill="#333333"/></g>
+      </svg>
+    </div>
+    <div class="prepared-badge">Prepared for Austin Walters<br>SpringTide Ventures · March 2026</div>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-tag">Capital Raise Diagnostic</div>
+    <h1>Is Your Raise Velocity<br>Matching Your Timeline?</h1>
+    <p class="sub">You manage the fund. LPs control the capital. The question is whether you have the <strong>LP acquisition system</strong> connecting the two.</p>
+  </div>
+
+  <!-- The Three Roles -->
+  <div class="section">
+    <div class="section-label">The Capital Stack</div>
+    <div class="card">
+      <div class="pillars">
+        <div class="pillar">
+          <div class="p-icon">🏦</div>
+          <div class="p-label">General Partners</div>
+          <div class="p-desc">You. Managing capital, executing deals, generating returns.</div>
+        </div>
+        <div class="pillar pillar-gap">
+          <div class="p-icon">⚡</div>
+          <div class="p-label">LP Acquisition System</div>
+          <div class="p-desc">The infrastructure that connects LP capital to your vehicle. Usually missing.</div>
+        </div>
+        <div class="pillar">
+          <div class="p-icon">💼</div>
+          <div class="p-label">Limited Partners</div>
+          <div class="p-desc">Family offices, allocators, institutions. They have the capital.</div>
+        </div>
+      </div>
+      <div class="pillar-arrow">
+        <div class="arrow-line"></div>
+        <div class="arrow-q">Do you have this middle layer?</div>
+        <div class="arrow-line"></div>
+      </div>
+      <p>Most funds have strong investment execution. The constraint is always the same: <strong>capital distribution capacity.</strong> No systematic way to generate qualified LP conversations at the velocity required to close.</p>
+      <p>That's a math problem. And math problems have answers.</p>
+    </div>
+  </div>
+
+  <!-- Calculator -->
+  <div class="section">
+    <div class="section-label">Raise Gap Model</div>
+    <div class="card">
+      <h2>Your Numbers. Your Timeline.</h2>
+      <p>Plug in your raise parameters. See exactly how many LP meetings per week you need.</p>
+
+      <div class="calc-wrapper">
+        <div class="calc-row">
+          <span class="calc-label">Raise Target</span>
+          <div class="calc-input-wrap">
+            <span class="prefix">$</span>
+            <input type="number" id="raiseTarget" value="150" min="1" max="5000" step="1" oninput="recalc()">
+            <span class="suffix">M</span>
+          </div>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label">Already Committed</span>
+          <div class="calc-input-wrap">
+            <span class="prefix">$</span>
+            <input type="number" id="committed" value="100" min="0" max="5000" step="1" oninput="recalc()">
+            <span class="suffix">M</span>
+          </div>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label">Avg Cheque Size</span>
+          <div class="calc-input-wrap">
+            <span class="prefix">$</span>
+            <input type="number" id="cheque" value="3000" min="10" max="50000" step="25" oninput="recalc()">
+            <span class="suffix">K</span>
+          </div>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label">Weeks to Close</span>
+          <div class="calc-input-wrap">
+            <input type="number" id="weeks" value="40" min="1" max="104" step="1" oninput="recalc()">
+            <span class="suffix">wks</span>
+          </div>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label">Current LP Meetings</span>
+          <div class="calc-input-wrap">
+            <input type="number" id="meetings" value="5" min="0" max="50" step="1" oninput="recalc()">
+            <span class="suffix">/ wk</span>
+          </div>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label">Close Rate</span>
+          <div class="calc-input-wrap">
+            <input type="number" id="closeRate" value="15" min="1" max="100" step="1" oninput="recalc()">
+            <span class="suffix">%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="results-panel">
+        <div class="results-grid">
+          <div class="result-item">
+            <div class="r-value value-red" id="r-gap">$20M</div>
+            <div class="r-label">Capital Gap</div>
+          </div>
+          <div class="result-item">
+            <div class="r-value value-amber" id="r-lps">80</div>
+            <div class="r-label">LPs Needed</div>
+          </div>
+          <div class="result-item">
+            <div class="r-value value-navy" id="r-mtgs">533</div>
+            <div class="r-label">Total Meetings</div>
+          </div>
+        </div>
+
+        <div class="bar-wrap">
+          <div class="bar-row">
+            <span class="bar-label">Current</span>
+            <div class="bar-track">
+              <div class="bar-fill bar-current" id="bar-current" style="width: 10%">2/wk</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Required</span>
+            <div class="bar-track">
+              <div class="bar-fill bar-required" id="bar-required" style="width: 80%">27/wk</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="alert-box" class="alert-box alert-critical" style="margin-top: 12px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cost of Waiting -->
+  <div class="section">
+    <div class="section-label">Cost of Waiting</div>
+    <div class="card">
+      <h2>Every Week of Delay Has a Price</h2>
+
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="label">Timeline Overrun</div>
+          <div class="value value-red" id="l-overrun">247 wks</div>
+        </div>
+        <div class="stat-box">
+          <div class="label">Delayed Mgmt Fees</div>
+          <div class="value value-amber" id="l-fees">$1.9M</div>
+        </div>
+      </div>
+
+      <div class="leakage-grid">
+        <div class="leakage-item">
+          <div class="leakage-title">💰 Management Fees</div>
+          <div class="leakage-desc">Uncommitted capital generates zero fees. Every week of overrun is lost revenue.</div>
+        </div>
+        <div class="leakage-item">
+          <div class="leakage-title">🏦 Deployment Delay</div>
+          <div class="leakage-desc">Capital not raised can't be deployed. Deal flow waits for no one.</div>
+        </div>
+        <div class="leakage-item">
+          <div class="leakage-title">📊 Carry Timeline</div>
+          <div class="leakage-desc">Late deployment pushes the entire return waterfall back. Compounds over the fund lifecycle.</div>
+        </div>
+        <div class="leakage-item">
+          <div class="leakage-title">🎯 LP Allocation Cycles</div>
+          <div class="leakage-desc">LPs allocate quarterly. Every quarter you're raising, a competitor is closing.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How BayRise Operates -->
+  <div class="section">
+    <div class="section-label">How BayRise Operates</div>
+    <div class="card">
+      <h2>We Build the Missing Layer</h2>
+      <p>BayRise is a boutique capital acquisition partner. We sit in the distribution layer of the capital stack and engineer the infrastructure that connects LP capital to your vehicle at a <strong>predictable, measurable rate.</strong></p>
+      <p>You keep full ownership of relationships, docs, and onboarding. We build and run the upstream origination engine.</p>
+
+      <div class="two-col">
+        <div class="col-card">
+          <h4 class="we-do">WHAT WE DO</h4>
+          <ul class="do-list">
+            <li>Model the raise mathematically</li>
+            <li>Map LP targets by mandate fit</li>
+            <li>Deploy structured investor origination</li>
+            <li>Increase qualified meeting velocity</li>
+            <li>Compress the raise timeline</li>
+          </ul>
+        </div>
+        <div class="col-card">
+          <h4 class="we-dont">WHAT WE DON'T DO</h4>
+          <ul class="dont-list">
+            <li>Replace your IR function</li>
+            <li>Manage investor relationships</li>
+            <li>Handle documentation or onboarding</li>
+            <li>Run generic marketing campaigns</li>
+            <li>Make speculative introductions</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Placement Agent Comparison -->
+  <div class="section">
+    <div class="section-label">Why This Is Different from Placement Agents</div>
+    <div class="card" style="border-left: 3px solid var(--orange);">
+      <h2>You're Already Working with Placement Folks. Here's the Gap.</h2>
+      <p>Traditional placement agents work from a <strong>fixed network of LP relationships.</strong> They call the same 50-200 allocators they already know, pitch your fund alongside several others, and hope for a fit. That model works when your fund profile overlaps with their existing book. When it doesn't, you're paying for access to a Rolodex that was never built for you.</p>
+
+      <div class="two-col">
+        <div class="col-card">
+          <h4 style="color: #94a3b8; font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">TYPICAL PLACEMENT AGENT</h4>
+          <ul class="dont-list">
+            <li>Works from a fixed LP network (50-200 contacts)</li>
+            <li>Pitches multiple funds simultaneously</li>
+            <li>Relies on existing relationships, not new ones</li>
+            <li>No systematic mandate matching or data layer</li>
+            <li>Can't scale outreach beyond their personal network</li>
+            <li>2% fee on capital raised (on a $50M gap: $1M)</li>
+          </ul>
+        </div>
+        <div class="col-card">
+          <h4 style="color: var(--orange); font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">BAYRISE ORIGINATION ENGINE</h4>
+          <ul class="do-list">
+            <li>Builds a bespoke LP universe for your specific mandate</li>
+            <li>100% white-labeled to SpringTide Ventures</li>
+            <li>Data-driven targeting: check size, geography, mandate, timing</li>
+            <li>Systematic outreach sequences at 10-15x the volume</li>
+            <li>Net-new allocators your placement agents will never reach</li>
+            <li>Complements (not replaces) your existing agents</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>Placement agents are relationship pipes. BayRise is an <strong>origination engine.</strong> They work in parallel. Your agents close their warm network while we systematically surface the 90% of mandate-fit allocators nobody in your current stack has ever spoken to.</p>
+    </div>
+  </div>
+
+  <!-- SpringTide Context -->
+  <div class="section">
+    <div class="section-label">SpringTide Context</div>
+    <div class="card">
+      <h2>Why This Is Relevant to Fund III</h2>
+      <p>SpringTide has one of the sharpest healthcare VC platforms out there. Repeat health-tech founders, a CMO embedded in the firm, and a Fund II that closed at $65M with strong performance. Fund III at $150M is a 2.3x step-up, and you've already closed the majority. That's a signal the thesis and track record resonate.</p>
+      <p>But the last $50M of any raise is structurally harder than the first $100M. The early capital came from existing LPs re-upping and warm introductions. The remaining gap requires reaching <strong>new allocators who have never seen the SpringTide story</strong>, at a pace that closes before December. Your placement agents are working their networks. The question is what happens when those networks are fully tapped.</p>
+      <p>At $3M average checks, you need roughly 17 new LP commitments. At a 15% close rate, that's 113 qualified meetings. Over 40 weeks, that's about 3 new LP meetings per week, on top of whatever your agents are already producing. That's the layer BayRise fills: the systematic, data-driven origination that runs alongside your existing placement relationships and surfaces the allocators they can't reach.</p>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h2>Worth 30 Minutes?</h2>
+    <p>We'll walk through your raise math, identify whether there's a velocity gap, and share whether we see direct LP alignment for your mandate.</p>
+    <a href="https://calendly.com/david-bayrisecap/new-meeting" target="_blank" class="cta-btn">Book 30 Min with David</a>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="brand">BAYRISE CAPITAL PARTNERS</div>
+  </div>
+
+</div>
+
+<script>
+function recalc() {
+  const target = parseFloat(document.getElementById('raiseTarget').value) || 0;
+  const committed = parseFloat(document.getElementById('committed').value) || 0;
+  const cheque = parseFloat(document.getElementById('cheque').value) || 1;
+  const weeks = parseFloat(document.getElementById('weeks').value) || 1;
+  const meetings = parseFloat(document.getElementById('meetings').value) || 0;
+  const closeRate = (parseFloat(document.getElementById('closeRate').value) || 1) / 100;
+
+  const gapM = Math.max(0, target - committed);
+  const gap = gapM * 1e6;
+  const chequeD = cheque * 1e3;
+  const lpsNeeded = Math.ceil(gap / chequeD);
+  const totalMeetings = Math.ceil(lpsNeeded / closeRate);
+  const weeklyRequired = Math.ceil(totalMeetings / weeks);
+  const actualWeeks = meetings > 0 && closeRate > 0 ? Math.ceil(lpsNeeded / (meetings * closeRate)) : 9999;
+  const overrun = Math.max(0, actualWeeks - weeks);
+
+  const annualFees = target * 1e6 * 0.02;
+  const weeklyFee = annualFees / 52;
+  const totalLeakage = weeklyFee * overrun;
+
+  document.getElementById('r-gap').textContent = '$' + gapM + 'M';
+  document.getElementById('r-lps').textContent = lpsNeeded;
+  document.getElementById('r-mtgs').textContent = totalMeetings;
+
+  const maxBar = Math.max(meetings, weeklyRequired, 1);
+  const barCurrent = document.getElementById('bar-current');
+  const barRequired = document.getElementById('bar-required');
+  barCurrent.style.width = Math.max((meetings / maxBar) * 100, 8) + '%';
+  barCurrent.textContent = meetings + '/wk';
+  barRequired.style.width = Math.max((weeklyRequired / maxBar) * 100, 8) + '%';
+  barRequired.textContent = weeklyRequired + '/wk';
+
+  const alertBox = document.getElementById('alert-box');
+  if (weeklyRequired <= meetings * 1.1) {
+    alertBox.className = 'alert-box alert-ok';
+    alertBox.textContent = 'Current velocity supports your timeline. But what happens if close rates soften?';
+  } else if (weeklyRequired <= meetings * 2.5) {
+    alertBox.className = 'alert-box alert-warning';
+    alertBox.textContent = 'You need ' + weeklyRequired + ' meetings/week. You\'re running ' + meetings + '. Closeable with structured origination support.';
+  } else {
+    alertBox.className = 'alert-box alert-critical';
+    if (meetings === 0) {
+      alertBox.textContent = 'At 0 meetings/week, this raise doesn\'t close. You need ' + weeklyRequired + ' qualified LP meetings per week.';
+    } else {
+      alertBox.textContent = 'At current velocity, this raise takes ~' + actualWeeks + ' weeks. That\'s ' + overrun + ' weeks past your deadline. You need ' + weeklyRequired + ' meetings/week; you\'re running ' + meetings + '.';
+    }
+  }
+
+  document.getElementById('l-overrun').textContent = overrun > 0 ? overrun + ' wks' : 'None';
+  document.getElementById('l-overrun').style.color = overrun > 0 ? 'var(--red)' : 'var(--green)';
+
+  const fmt = totalLeakage >= 1e6 ? '$' + (totalLeakage / 1e6).toFixed(1) + 'M' : totalLeakage >= 1e3 ? '$' + (totalLeakage / 1e3).toFixed(0) + 'K' : '$' + totalLeakage.toFixed(0);
+  document.getElementById('l-fees').textContent = overrun > 0 ? fmt : '$0';
+  document.getElementById('l-fees').style.color = overrun > 0 ? 'var(--amber)' : 'var(--green)';
+}
+
+recalc();
+</script>
+
+</body>
+</html>
