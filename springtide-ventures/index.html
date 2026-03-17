@@ -490,8 +490,8 @@
           <span class="calc-label">Avg Cheque Size</span>
           <div class="calc-input-wrap">
             <span class="prefix">$</span>
-            <input type="number" id="cheque" value="3000" min="10" max="50000" step="25" oninput="recalc()">
-            <span class="suffix">K</span>
+            <input type="number" id="cheque" value="3" min="1" max="500" step="1" oninput="recalc()">
+            <span class="suffix">M</span>
           </div>
         </div>
         <div class="calc-row">
@@ -511,7 +511,7 @@
         <div class="calc-row">
           <span class="calc-label">Close Rate</span>
           <div class="calc-input-wrap">
-            <input type="number" id="closeRate" value="15" min="1" max="100" step="1" oninput="recalc()">
+            <input type="number" id="closeRate" value="10" min="1" max="100" step="1" oninput="recalc()">
             <span class="suffix">%</span>
           </div>
         </div>
@@ -668,7 +668,7 @@
       <h2>The Fund III Math</h2>
       <p>STV III targets $150M in committed capital. After $25M in management fees and $1.5M in syndication costs, that puts <strong>$123.5M of investable capital</strong> across 20 portfolio companies: $92.6M in first checks (avg $4.6M per company) and $30.9M in reserves for follow-ons and pro ratas.</p>
       <p>That's a well-constructed portfolio. The question is whether the capital formation side is keeping pace with the deployment plan. With a December 2026 final close, every month the remaining gap stays open is a month those 20 portfolio slots aren't fully funded. Companies in the pipeline don't wait for your LP base to catch up.</p>
-      <p>At $3M average LP checks, closing a $70M gap requires <strong>24 new LP commitments.</strong> At a 15% close rate, that's 160 qualified meetings. Over 40 weeks, that's 4 new LP meetings per week, every single week, with no breaks. Your existing placement agents are covering part of that, but their networks are finite. Once those contacts are worked, the pipeline stalls unless there's a systematic origination layer behind them producing net-new, mandate-fit conversations at scale.</p>
+      <p>At $3M average LP checks, closing a $70M gap requires <strong>24 new LP commitments.</strong> At a 10% close rate, that's 240 qualified meetings. Over 40 weeks, that's 6 new LP meetings per week, every single week, with no breaks. Your existing placement agents are covering part of that, but their networks are finite. Once those contacts are worked, the pipeline stalls unless there's a systematic origination layer behind them producing net-new, mandate-fit conversations at scale.</p>
     </div>
   </div>
 
@@ -697,7 +697,7 @@ function recalc() {
 
   const gapM = Math.max(0, target - committed);
   const gap = gapM * 1e6;
-  const chequeD = cheque * 1e3;
+  const chequeD = cheque * 1e6;
   const lpsNeeded = Math.ceil(gap / chequeD);
   const totalMeetings = Math.ceil(lpsNeeded / closeRate);
   const weeklyRequired = Math.ceil(totalMeetings / weeks);
